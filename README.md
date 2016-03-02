@@ -47,10 +47,12 @@ Ussage Example
 package main
 
 import (
+    "fmt"
     "net/http"
+    "os"
 
     "github.com/codegangsta/negroni"
-    "github.com/gorilla/mux"
+    "github.com/gorilla/context"
     nigronimgosession "github.com/joeljames/nigroni-mgo-session"
 )
 
@@ -67,13 +69,16 @@ func main() {
     n := negroni.Classic()
 
     mux := http.NewServeMux()
-    mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-        session := sessions.GetSession(req)
-        session.Set("hello", "world")
+    mux.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+        db := context.Get(request, 0)
+        mgoSession := context.Get(request, 1)
+        fmt.Fprintf(writer, "Within the handler")
+        fmt.Println("db: ", db)
+        fmt.Println("mgoSession: ", mgoSession)
     })
 
     // Register the middleware here.
-    n.Use(middleware.NewDatabase(dbAccessor).Middleware())
+    n.Use(nigronimgosession.NewDatabase(*dbAccessor).Middleware())
 
     n.UseHandler(mux)
     n.Run(":3000")
