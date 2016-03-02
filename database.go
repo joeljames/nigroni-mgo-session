@@ -15,10 +15,10 @@ func NewDatabase(databaseAccessor DatabaseAccessor) *Database {
 }
 
 func (d *Database) Middleware() negroni.HandlerFunc {
-	return func(rw http.ResponseWriter, request *http.Request, next http.HandlerFunc) {
-		reqSession := d.dba.Session.Clone()
+	return func(writer http.ResponseWriter, request *http.Request, next http.HandlerFunc) {
+		reqSession := d.dba.Clone()
 		defer reqSession.Close()
 		d.dba.Set(request, reqSession)
-		next(rw, request)
+		next(writer, request)
 	}
 }

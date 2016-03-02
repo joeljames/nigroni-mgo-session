@@ -11,13 +11,12 @@ type DatabaseAccessor struct {
 	*mgo.Session
 	url  string
 	name string
-	coll string
 }
 
-func NewDatabaseAccessor(url, name, coll string) (*DatabaseAccessor, error) {
+func NewDatabaseAccessor(url, name, string) (*DatabaseAccessor, error) {
 	session, err := mgo.Dial(url)
 	if err == nil {
-		return &DatabaseAccessor{session, url, name, coll}, nil
+		return &DatabaseAccessor{session, url, name}, nil
 	} else {
 		return &DatabaseAccessor{}, err
 	}
