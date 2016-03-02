@@ -1,3 +1,6 @@
+Work in progress. Please donot use the package yet.
+---------------------------------------------------
+
 nigroni-mgo-session
 ===================
 
@@ -38,8 +41,8 @@ If you haven't installed `nigroni-mgo-session`, you can run the below command to
         go get gopkg.in/mgo.v2
         ```
 
-Ussage
-------
+Ussage Example
+--------------
 ```
 package main
 
@@ -48,6 +51,7 @@ import (
 
     "github.com/codegangsta/negroni"
     "github.com/gorilla/mux"
+    nigronimgosession "github.com/joeljames/nigroni-mgo-session"
 )
 
 func main() {
@@ -55,7 +59,7 @@ func main() {
     dbName := os.Getenv("DATABASE_NAME")
     dbColl := "widget"
 
-    dbAccessor, err := utils.NewDatabaseAccessor(dbURL, dbName, dbColl)
+    dbAccessor, err := nigronimgosession.NewDatabaseAccessor(dbURL, dbName, dbColl)
     if err != nil {
         panic(err)
     }
@@ -69,10 +73,9 @@ func main() {
     })
 
     // Register the middleware here.
-    n.Use(middleware.NewDatabase(databaseAccessor).Middleware())
+    n.Use(middleware.NewDatabase(dbAccessor).Middleware())
 
     n.UseHandler(mux)
     n.Run(":3000")
 }
-
 ```
