@@ -25,6 +25,6 @@ func NewDatabaseAccessor(url, name, coll string) (*DatabaseAccessor, error) {
 
 func (da *DatabaseAccessor) Set(request *http.Request, session *mgo.Session) {
 	db := session.DB(da.name)
-	context.Set(request, 0, db)
-	context.Set(request, 1, session)
+	context.Set(request, "db", db)
+	context.Set(request, "mgoSession", session)
 }
