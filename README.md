@@ -81,16 +81,16 @@ If you haven't installed `nigroni-mgo-session`, you can run the below command to
         mux := http.NewServeMux()
         mux.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
             // You can access the mgo db object from the request object.
-            // The db object is stored in key `0`.
-            db := context.Get(request, 0).(*mgo.Database)
+            // The db object is stored in key `db`.
+            db := context.Get(request, "db").(*mgo.Database)
             // Now lets perform a count query using mgo db object.
             count, _ := db.C("widget").Find(nil).Count()
             fmt.Fprintf(writer, "Determining the count in the collection using the db object. \n\n")
             fmt.Fprintf(writer, "Total number of object in the mongo database: %d  \n\n", count)
 
             // You can access the mgo session object from the request object.
-            // The session object is stored in key `1`.
-            mgoSession := context.Get(request, 1).(*mgo.Session)
+            // The session object is stored in key `mgoSession`.
+            mgoSession := context.Get(request, "mgoSession").(*mgo.Session)
             count2, _ := mgoSession.DB(dbName).C("widget").Find(nil).Count()
             fmt.Fprintf(writer, "Determining the count in the collection using the session object. \n\n")
             fmt.Fprintf(writer, "Total number of object in the mongo database: %d  \n\n", count2)
@@ -100,7 +100,7 @@ If you haven't installed `nigroni-mgo-session`, you can run the below command to
         n.UseHandler(mux)
         n.Run(":3000")
     }
-```
+    ```
 
 5. If you have the package and dependency downloaded, you could simple copy the above example to a file `example.go` and then run the command `go run example.go` to start up the server.
 
