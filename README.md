@@ -40,7 +40,7 @@ If you haven't installed `nigroni-mgo-session`, you can run the below command to
 
 4. Now lets add an example which demonstrates the usage of this middleware. I have added comments to the example to explain the usage.
 
-    ```
+    ```go
     package main
 
     import (
