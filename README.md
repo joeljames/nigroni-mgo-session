@@ -27,11 +27,6 @@ If you haven't installed `nigroni-mgo-session`, you can run the below command to
         ```
         go get github.com/codegangsta/negroni
         ```
-    * To install [Gorilla Context](https://github.com/gorilla/context) run the command below. This package is used to set variables on request object.
-
-        ```
-        go get github.com/gorilla/context
-        ```
     * To install [mgo](https://github.com/go-mgo/mgo) run the command below.
 
         ```
@@ -49,7 +44,6 @@ If you haven't installed `nigroni-mgo-session`, you can run the below command to
         "os"
 
         "github.com/codegangsta/negroni"
-        "github.com/gorilla/context"
         nigronimgosession "github.com/joeljames/nigroni-mgo-session"
         mgo "gopkg.in/mgo.v2"
     )
@@ -80,21 +74,20 @@ If you haven't installed `nigroni-mgo-session`, you can run the below command to
 
         mux := http.NewServeMux()
         mux.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-            // You can access the mgo db object from the request object.
-            // The db object is stored in key `db`.
-            db := context.Get(request, "db").(*mgo.Database)
+            // You can access the nms object from the request context.
+            // The nms object is stored in key `nms`.
+            ctx := request.Context()
+            nms := ctx.Value(nigronimgosession.KEY).(*nigronimgosession.NMS)
             // Now lets perform a count query using mgo db object.
-            count, _ := db.C("widget").Find(nil).Count()
+            count, _ := nms.DB.C(dbName).Find(nil).Count()
             fmt.Fprintf(writer, "Determining the count in the collection using the db object. \n\n")
             fmt.Fprintf(writer, "Total number of object in the mongo database: %d  \n\n", count)
 
             // You can access the mgo session object from the request object.
             // The session object is stored in key `mgoSession`.
-            mgoSession := context.Get(request, "mgoSession").(*mgo.Session)
-            count2, _ := mgoSession.DB(dbName).C("widget").Find(nil).Count()
+            count2, _ := nms.Session.DB(dbName).C("widget").Find(nil).Count()
             fmt.Fprintf(writer, "Determining the count in the collection using the session object. \n\n")
             fmt.Fprintf(writer, "Total number of object in the mongo database: %d  \n\n", count2)
-
         })
 
         n.UseHandler(mux)

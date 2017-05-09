@@ -18,7 +18,7 @@ func (d *Database) Middleware() negroni.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request, next http.HandlerFunc) {
 		reqSession := d.dba.Clone()
 		defer reqSession.Close()
-		d.dba.Set(request, reqSession)
-		next(writer, request)
+		ctx := d.dba.Set(request.Context(), request, reqSession)
+		next(writer, request.WithContext(ctx))
 	}
 }
