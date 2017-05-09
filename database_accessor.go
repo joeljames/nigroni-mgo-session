@@ -1,9 +1,8 @@
 package nigronimgosession
 
 import (
+	"context"
 	"net/http"
-
-	"github.com/gorilla/context"
 	mgo "gopkg.in/mgo.v2"
 )
 
@@ -23,8 +22,8 @@ func NewDatabaseAccessor(url, name, coll string) (*DatabaseAccessor, error) {
 	}
 }
 
-func (da *DatabaseAccessor) Set(request *http.Request, session *mgo.Session) {
+func (da *DatabaseAccessor) Set(ctx context.Context, request *http.Request, session *mgo.Session) context.Context{
 	db := session.DB(da.name)
-	context.Set(request, "db", db)
-	context.Set(request, "mgoSession", session)
+	nms := &NMS{db, session}
+	return context.WithValue(ctx, "nms", nms)
 }
