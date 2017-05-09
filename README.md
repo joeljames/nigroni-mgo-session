@@ -45,7 +45,6 @@ If you haven't installed `nigroni-mgo-session`, you can run the below command to
 
         "github.com/codegangsta/negroni"
         nigronimgosession "github.com/joeljames/nigroni-mgo-session"
-        mgo "gopkg.in/mgo.v2"
     )
 
     func main() {
@@ -79,7 +78,8 @@ If you haven't installed `nigroni-mgo-session`, you can run the below command to
             ctx := request.Context()
             nms := ctx.Value(nigronimgosession.KEY).(*nigronimgosession.NMS)
             // Now lets perform a count query using mgo db object.
-            count, _ := nms.DB.C(dbName).Find(nil).Count()
+            count, _ := nms.DB.C("widget").Find(nil).Count()
+
             fmt.Fprintf(writer, "Determining the count in the collection using the db object. \n\n")
             fmt.Fprintf(writer, "Total number of object in the mongo database: %d  \n\n", count)
 
