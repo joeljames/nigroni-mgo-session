@@ -77,7 +77,7 @@ If you haven't installed `nigroni-mgo-session`, you can run the below command to
             // You can access the nms object from the request context.
             // The nms object is stored in key `nms`.
             ctx := request.Context()
-            nms := ctx.Value("nms").(*nigronimgosession.NMS)
+            nms := ctx.Value(nigronimgosession.KEY).(*nigronimgosession.NMS)
             // Now lets perform a count query using mgo db object.
             count, _ := nms.DB.C(dbName).Find(nil).Count()
             fmt.Fprintf(writer, "Determining the count in the collection using the db object. \n\n")

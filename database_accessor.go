@@ -25,5 +25,5 @@ func NewDatabaseAccessor(url, name, coll string) (*DatabaseAccessor, error) {
 func (da *DatabaseAccessor) Set(ctx context.Context, request *http.Request, session *mgo.Session) context.Context{
 	db := session.DB(da.name)
 	nms := &NMS{db, session}
-	return context.WithValue(ctx, "nms", nms)
+	return context.WithValue(ctx, KEY, nms)
 }
