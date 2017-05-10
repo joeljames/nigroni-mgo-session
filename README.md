@@ -89,7 +89,7 @@ If you haven't installed `nigroni-mgo-session`, you can run the below command to
             mux := http.NewServeMux()
             mux.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
                 // You can access the nms object from the request context.
-                // The nms object is stored in key `nms`.
+                // The nms object is stored in key `nigronimgosession.KEY`.
                 ctx := request.Context()
                 nms := ctx.Value(nigronimgosession.KEY).(*nigronimgosession.NMS)
                 // Now lets perform a count query using mgo db object.
